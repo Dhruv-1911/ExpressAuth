@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken")
 module.exports = {
     userRegistration: async (req, res) => {
         try {
-            const { name, email, password, confirm_password ,Role } = req.body
+            const { name, email, password, confirm_password, Role } = req.body
             const user = await User.findOne({ email: email })
             if (user) {
                 res.status(400).json({
@@ -13,20 +13,20 @@ module.exports = {
                 })
             }
             else {
-                if (name && email && password && confirm_password ) {
+                if (name && email && password && confirm_password) {
                     if (password === confirm_password) {
                         const hash = await bcrypt.hash(password, 10)
                         const user = new User({
                             name: name,
                             email: email,
                             password: hash,
-                            Role:Role
+                            Role: Role
                         })
                         await user.save()
-                        const token = jwt.sign({ userId: user._id , Role :user.Role }, process.env.JWT_SECRET, { expiresIn: "1d" })
+                        const token = jwt.sign({ userId: user._id, Role: user.Role }, process.env.JWT_SECRET, { expiresIn: "1d" })
                         res.status(200).json({
                             message: "User successfully register 😎",
-                            Token:token
+                            Token: token
                         })
                     }
                     else {
@@ -63,7 +63,7 @@ module.exports = {
                     const match = await bcrypt.compare(password, user.password)
 
                     if ((email === user.email) && match) {
-                        const token = jwt.sign({ userId: user._id , Role :user.Role}, process.env.JWT_SECRET, { expiresIn: "1d" })
+                        const token = jwt.sign({ userId: user._id, Role: user.Role }, process.env.JWT_SECRET, { expiresIn: "1d" })
                         res.status(200).json({
                             message: "login successfully 😎",
                             "Token": token
@@ -128,6 +128,20 @@ module.exports = {
 
             res.json({
                 "user": user
+            })
+        } catch (error) {
+            res.status(500).json({
+                message: "somthing went wrong"
+            })
+        }
+    },
+
+    getAlluser: async (req, res) => {
+        try {
+            const user = await User.find({})
+            res.status(200).json({
+                message: "here all are users",
+                user: user
             })
         } catch (error) {
             res.status(500).json({

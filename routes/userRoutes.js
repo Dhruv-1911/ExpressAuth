@@ -9,6 +9,7 @@ router.post("/login", userController.userLogin);
 router.post("/changespassword", adminAuth, userController.changePassword)
 
 router.get("/loggeduser", auth, userController.loggedUser)
+router.get("/alluser", adminAuth,userController.getAlluser)
 
 
 module.exports = router
