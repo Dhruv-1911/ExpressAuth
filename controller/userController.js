@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
 module.exports = {
+    //this registration api
     userRegistration: async (req, res) => {
         try {
             const { name, email, password, confirm_password, Role } = req.body
